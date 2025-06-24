@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Anggota\AbsensiController as AnggotaAbsensiController;
 use App\Http\Controllers\Anggota\DashboardController as AnggotaDashboardController;
+use App\Http\Controllers\Anggota\PengumumanAnggotaController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
@@ -95,6 +96,9 @@ Route::middleware(['auth', 'role:anggota'])->group(function () {
     Route::get('/anggota/dashboard', [AnggotaDashboardController::class, 'index'])->name('anggota.dashboard');
     Route::get('/anggota/absensi', [AnggotaAbsensiController::class, 'index'])->name('anggota.absensi.index');
     Route::post('/anggota/absensi', [AnggotaAbsensiController::class, 'store'])->name('anggota.absensi.store');
+    Route::resource('anggota/pengumuman', PengumumanAnggotaController::class)->names([
+        'index' => 'anggota.pengumuman.index',
+    ]);
 });
 Route::get('/phpinfo', function () {
     phpinfo();

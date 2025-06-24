@@ -1,8 +1,49 @@
 <?php
 
+use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\CheckInController;
+use App\Http\Controllers\Api\ChecklistController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\PengumumanController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\SubtaskController;
+use App\Http\Controllers\Api\TaskController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('projects', ProjectController::class);
+    Route::apiResource('tasks', TaskController::class);
+    // Subtask
+    Route::apiResource('tasks.subtasks', SubtaskController::class)->shallow();
+
+    // Checklist
+    Route::apiResource('tasks.checklists', ChecklistController::class)->shallow();
+
+    // Comment
+    Route::apiResource('tasks.comments', CommentController::class)->shallow();
+
+    // Pengumuman
+    Route::get('/pengumuman', [PengumumanController::class, 'index']);
+    Route::post('/pengumuman', [PengumumanController::class, 'store']);
+
+    // Chat
+    Route::get('/chats', [ChatController::class, 'index']);
+    Route::get('/chats/{chat}', [ChatController::class, 'show']);
+    Route::post('/chats', [ChatController::class, 'store']);
+    Route::post('/chats/{chat}/message', [ChatController::class, 'sendMessage']);
+});
+Route::post('/login', function (Request $request) {
+    $user = \App\Models\User::where('username', $request->username)->first();
+
+    if ($user && Hash::check($request->password, $user->password)) {
+        return ['token' => $user->createToken('api-token')->plainTextToken];
+    }
+
+    return response()->json(['message' => 'Unauthorized'], 401);
+});

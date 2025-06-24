@@ -45,9 +45,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard.index', compact(
             'profile', 'title', 'jumlahAnggota',
-            'absensiData', 'keuanganData', 'programs', 'totalTamuHariIni',
-            'totalTamuBulanIni', 'totalTamu', 'totalBarang', 'barangRusak',
-            'barangDipinjam', 'barangHilang'
+            'absensiData', 'keuanganData', 'programs', 
         ));
     }
 }

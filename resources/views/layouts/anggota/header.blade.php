@@ -4,7 +4,7 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="icon" href="{{ Storage::url($profile->logo) }}" />
+    <link rel="icon" href="{{ $profile?->logo ? Storage::url($profile->logo) : asset('default-logo.png') }}" />
     <title>{{ $title }}</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

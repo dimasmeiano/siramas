@@ -3,7 +3,7 @@
         <!--begin::Copyright-->
         <strong>
           Copyright &copy; 2025&nbsp;
-          <a href="#" class="text-decoration-none">{{ $profile->nama_organisasi }}</a>.
+          <a href="#" class="text-decoration-none">{{ $profile ? $profile->nama_organisasi : '-' }}</a>.
         </strong>
         All rights reserved.
         <!--end::Copyright-->

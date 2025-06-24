@@ -99,6 +99,12 @@
                   <p>Absensi</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('anggota.pengumuman.index') }}" class="nav-link active">
+                  <i class="nav-icon bi bi-person-fill"></i>
+                  <p>Pengumuman</p>
+                </a>
+              </li>
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

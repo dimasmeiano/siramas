@@ -18,9 +18,6 @@ return new class extends Migration
             $table->text('misi')->nullable();
             $table->string('alamat_sekretariat')->nullable();
             $table->string('no_hp')->nullable();
-            $table->string('link_youtube')->nullable();
-            $table->string('link_instagram')->nullable();
-            $table->string('link_facebook')->nullable();
             $table->string('logo')->nullable();
             $table->string('foto_masjid')->nullable();
             $table->timestamps();

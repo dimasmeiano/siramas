@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\Anggota\AbsensiController as AnggotaAbsensiController;
+use App\Http\Controllers\Anggota\ChatController;
 use App\Http\Controllers\Anggota\DashboardController as AnggotaDashboardController;
 use App\Http\Controllers\Anggota\PengumumanAnggotaController;
 use App\Http\Controllers\DashboardController;
@@ -41,7 +42,7 @@ Route::post('/tamu', [FrontendBukuTamuController::class, 'store'])->name('tamu.s
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware(['guest'])
-    ->name('login');
+    ->name('login.submit'); // <--- ubah nama route di sini
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('members', MemberController::class);
@@ -92,13 +93,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/buku-tamu-export-pdf', [BukuTamuController::class, 'exportPdf'])->name('buku_tamu.exportPdf');
 });
 
-Route::middleware(['auth', 'role:anggota'])->group(function () {
-    Route::get('/anggota/dashboard', [AnggotaDashboardController::class, 'index'])->name('anggota.dashboard');
-    Route::get('/anggota/absensi', [AnggotaAbsensiController::class, 'index'])->name('anggota.absensi.index');
-    Route::post('/anggota/absensi', [AnggotaAbsensiController::class, 'store'])->name('anggota.absensi.store');
-    Route::resource('anggota/pengumuman', PengumumanAnggotaController::class)->names([
-        'index' => 'anggota.pengumuman.index',
-    ]);
+Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('/chat/label/{slug}', [ChatController::class, 'label'])->name('chat.label');
 });
 Route::get('/phpinfo', function () {
     phpinfo();

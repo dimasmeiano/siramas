@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         }elseif ($user->hasRole('kontributor')) {
             return redirect()->route('sekretaris.dashboard');
         } else {
-            return redirect()->route('anggota.dashboard');
+            return redirect()->route('anggota.chat.index');
         }
     }
 }

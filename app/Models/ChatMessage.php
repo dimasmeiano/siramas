@@ -15,6 +15,10 @@ class ChatMessage extends Model
         'file_path',
     ];
 
+    protected $casts = [
+        'is_read' => 'boolean',
+    ];
+
     public function chat()
     {
         return $this->belongsTo(Chat::class);

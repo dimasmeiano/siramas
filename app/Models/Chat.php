@@ -14,10 +14,9 @@ class Chat extends Model
         'created_by',
     ];
 
-    public function members()
-    {
-        return $this->hasMany(ChatMember::class);
-    }
+    public function members() {
+    return $this->belongsToMany(User::class, 'chat_members', 'chat_id', 'user_id')->with('member');
+}
 
     public function messages()
     {
@@ -28,4 +27,8 @@ class Chat extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function lastMessage() {
+    return $this->hasOne(ChatMessage::class)->latestOfMany();
+}
 }

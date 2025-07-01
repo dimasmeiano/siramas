@@ -74,7 +74,7 @@
               </ul>
             </div>
           @endif
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login.submit') }}">
             @csrf
             <div class="input-group mb-3">
               <input type="username" type="email" name="username" class="form-control" placeholder="Username" />

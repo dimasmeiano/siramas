@@ -18,3 +18,6 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
+// Tambahan sementara untuk debugging
+ini_set('memory_limit', '512M');
+set_time_limit(60);

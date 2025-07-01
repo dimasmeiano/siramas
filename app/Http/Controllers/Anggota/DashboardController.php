@@ -15,6 +15,23 @@ class DashboardController extends Controller
         $profile = OrganizationProfile::first();
         $title = 'Dashboard';
         $user = \Illuminate\Support\Facades\Auth::user();
+        $chats = [
+        (object)[
+            'name' => 'Work Notice: PT. Jenggala',
+            'last_message' => '[Attendance] Saatnya absensi ...',
+            'time' => '18:00'
+        ],
+        (object)[
+            'name' => 'SeaTalk Team',
+            'last_message' => '[SeaTalk Assistant] Selamat, Anda...',
+            'time' => 'Tuesday'
+        ],
+        (object)[
+            'name' => 'Dimas Meilano Dwi S...',
+            'last_message' => 'p',
+            'time' => 'Tuesday'
+        ],
+    ];
 
         $pengumuman = Pengumuman::orderBy('tanggal_mulai', 'desc')->take(5)->get();
         $checkinToday = Absensi::whereDate('waktu_absen', now())->where('anggota_id', $user->id)->exists();
@@ -26,6 +43,6 @@ class DashboardController extends Controller
     });
         $tugasAktif = 3; // placeholder, bisa ganti dari modul task
 
-        return view('anggota.dashboard.index', compact('profile', 'title', 'pengumuman', 'checkinToday', 'sisaCuti', 'tugasAktif'));
+        return view('anggota.dashboard.index', compact('profile', 'title', 'pengumuman', 'checkinToday', 'sisaCuti', 'tugasAktif', 'chats'));
     }
 }

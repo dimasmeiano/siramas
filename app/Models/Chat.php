@@ -14,8 +14,8 @@ class Chat extends Model
         'created_by',
     ];
 
-    public function members() {
-    return $this->belongsToMany(User::class, 'chat_members', 'chat_id', 'user_id')->with('member');
+   public function members() {
+    return $this->belongsToMany(User::class, 'chat_members', 'chat_id', 'user_id');
 }
 
     public function messages()

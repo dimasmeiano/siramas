@@ -38,13 +38,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/chats', [ChatController::class, 'store']);
     Route::post('/chats/{chat}/message', [ChatController::class, 'sendMessage']);
 
-    Route::post('/chat/{chat}/mark-as-read', function (\App\Models\Chat $chat) {
-    $userId = auth()->id();
-    \App\Models\ChatMessage::where('chat_id', $chat->id)
-        ->where('sender_id', '!=', $userId)
-        ->where('is_read', false)
-        ->update(['is_read' => true]);
-
-    return response()->json(['status' => 'ok']);
-});
 });

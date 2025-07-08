@@ -50,6 +50,11 @@ class User extends Authenticatable
         // If you store role as a string column, e.g. $this->role
         return $this->role === $role;
     }
+
+    public function chats()
+{
+    return $this->belongsToMany(Chat::class, 'chat_members');
+}
     
     /**
      * The attributes that should be hidden for serialization.

@@ -29,6 +29,8 @@ use App\Http\Controllers\ProgramGaleriController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\VisitorController;
+use App\Livewire\Anggota\ChatInterface;
+use App\Livewire\Anggota\ChatRoom;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -94,10 +96,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    Route::get('/chat/{id}', [ChatController::class, 'show'])->name('chat.show');
-    Route::post('/chat', [ChatController::class, 'store'])->name('chat.store');
-    Route::get('/chat/label/{slug}', [ChatController::class, 'label'])->name('chat.label');
+    Route::get('/chat', ChatInterface::class)->name('chat');
 });
 Route::get('/phpinfo', function () {
     phpinfo();

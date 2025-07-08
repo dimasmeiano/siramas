@@ -18,7 +18,9 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "@ryangjchandler/alpine-clipboard": "^2.3.0",
         "alpinejs": "^3.14.9",
+        "daisyui": "^5.0.46",
         "laravel-echo": "^2.1.6",
         "pusher-js": "^8.4.0"
     }

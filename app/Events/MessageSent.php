@@ -11,19 +11,26 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent
+class MessageSent implements ShouldBroadcast
 {
-    use SerializesModels;
+    use InteractsWithSockets;
 
     public $message;
 
     public function __construct(ChatMessage $message)
     {
-        $this->message = $message->load('sender.member');
+        $this->message = $message;
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
-        return new PrivateChannel('chat.' . $this->message->chat_id);
+        return new Channel('chat.' . $this->message->chat_id);
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'message' => $this->message->toArray()
+        ];
     }
 }

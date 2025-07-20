@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -27,35 +26,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'name',
+        'email',
         'password',
-        'member_id',
     ];
 
-    public function member()
-    {
-        return $this->belongsTo(Member::class, 'member_id');
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user');
-    }
-
-     public function hasRole($role)
-    {
-        if (method_exists($this, 'roles')) {
-            return $this->roles()->where('name', $role)->exists();
-        }
-        // If you store role as a string column, e.g. $this->role
-        return $this->role === $role;
-    }
-
-    public function chats()
-{
-    return $this->belongsToMany(Chat::class, 'chat_members');
-}
-    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -73,6 +48,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $appends = [
+        'profile_photo_url',
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -85,15 +63,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function taskAssignments()
-    {
-        return $this->hasMany(TaskAssignee::class);
-    }
-
-    public function taskComments()
-    {
-        return $this->hasMany(TaskComment::class);
     }
 }

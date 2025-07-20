@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    return true; // Tambahkan logic autentikasi jika perlu
+    return $user->chats()->where('chat_id', $chatId)->exists();
+});
+
+Broadcast::channel('chat.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
 });

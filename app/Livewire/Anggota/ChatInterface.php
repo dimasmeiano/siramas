@@ -7,6 +7,7 @@ use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -19,6 +20,7 @@ class ChatInterface extends Component
     public $message = '';
     public $file; // For file uploads
     public $user;
+    public $userId;
     public $showNewMessageModal = false;
     public $selectedUserId;
     public $availableUsers = [];
@@ -32,37 +34,48 @@ class ChatInterface extends Component
     public $allUsers = [];
     public $newGroupName = '';
     
-    protected $listeners = [
-    'refreshSidebar' => 'loadChats',
-    'refreshChatRoom' => 'loadChatRoom',
-    'chatSelected' => 'selectChat',
-    'leaveGroupRequest' => 'leaveGroup',
-    'exitChat' => 'exitChat',
-];
-    
+    public function getListeners()
+    {
+        return [
+            "echo-private:chat.{$this->user->id},MessageSent" => 'refreshSidebar',
+            'refreshSidebar' => 'loadChats',
+            'refreshChatRoom' => 'loadChatRoom',
+            'chatSelected' => 'selectChat',
+            'leaveGroupRequest' => 'leaveGroup',
+            'exitChat' => 'exitChat',
+        ];
+    }
     public function mount()
     {
+        $this->userId = Auth::id();
         $this->user = Auth::user();
         $this->loadChats();
+    }
+
+    public function handleNewSidebarMessage($payload)
+    {
+        $this->loadChats(); // Atau logic untuk refresh sidebar
     }
     
     public function loadChats()
     {
+        Log::info('loadChats dipanggil!');
         $this->chats = Chat::with(['messages' => fn($q) => $q->latest()->limit(1), 'members.member'])
             ->whereHas('members', fn($q) => $q->where('user_id', $this->user->id))
             ->get();
             
-        $unreadCounts = ChatMessage::select('chat_id', DB::raw('count(*) as count'))
+            $unreadCounts = ChatMessage::select('chat_id', DB::raw('count(*) as count'))
             ->where('is_read', false)
             ->where('sender_id', '!=', $this->user->id)
             ->whereIn('chat_id', $this->chats->pluck('id'))
             ->groupBy('chat_id')
             ->get()
             ->keyBy('chat_id');
-        
+            
         foreach ($this->chats as $chat) {
             $chat->unread_count = $unreadCounts[$chat->id]['count'] ?? 0;
         }
+
     }
     
     public function selectChat($chatId)

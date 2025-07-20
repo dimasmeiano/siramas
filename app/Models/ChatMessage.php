@@ -3,20 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model as Eloquent;
 
-class ChatMessage extends Model
+class ChatMessage extends Eloquent
 {
-    protected $table = 'chat_messages';
+    protected $connection = 'mongodb';
+    protected $collection = 'messages';
     protected $fillable = [
         'chat_id',
         'sender_id',
         'message',
         'type',
-        'file_path',
+        'meta',
+        'file_url',
+        'created_at',
     ];
 
     protected $casts = [
-        'is_read' => 'boolean',
+        'meta' => 'array',
+        'created_at' => 'datetime',
     ];
 
     public function chat()
@@ -28,4 +33,6 @@ class ChatMessage extends Model
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
+
+    public $timestamps = false; // Kalau kamu pakai created_at manual
 }
